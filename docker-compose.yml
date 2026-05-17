@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../infra/Dockerfile.backend
+    container_name: dip-backend
+    # restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - .env
+    # environment:
+    # NODE_ENV: development
+    # PORT: 3000
+    # DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    # CHROMA_URL: http://chromadb:8001
+    # MINIO_ENDPOINT: minio
+    # MINIO_PORT: 9000
+    # MINIO_ACCESS_KEY: minioadmin
+    # MINIO_SECRET_KEY: minioadmin
+    # MINIO_BUCKET: documents
+    depends_on:
+      - postgres
+      - chromadb
+      # - minio
+
+  postgres:
+    image: postgres:15
+    # restart: unless-stopped
+    restart: always
+    container_name: dip-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: dip-chromadb
+    restart: always
+    ports:
+      - "8001:8000"
+    # environment:
+    # IS_PERSISTENT: "TRUE"
+    # ALLOW_RESET: "TRUE"
+    volumes:
+      - chroma_data:/chroma/chroma
+
+  minio:
+    image: minio/minio
+    container_name: dip-minio
+    # restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    # command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+volumes:
+  postgres_data:
+  chroma_data:
+  minio_data:
