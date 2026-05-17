@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: ../infra/Dockerfile.backend
+      dockerfile: ../infra/docker/Dockerfile.backend
     container_name: dip-backend
     # restart: unless-stopped
     ports:
@@ -12,7 +12,7 @@ services:
     volumes:
       - ./backend:/app
     env_file:
-      - .env
+      - ./backend/.env
     # environment:
     # NODE_ENV: development
     # PORT: 3000
