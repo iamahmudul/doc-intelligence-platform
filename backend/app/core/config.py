@@ -1,11 +1,7 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from typing import Optional
 
 class Settings(BaseSettings):
-    app_name: str = "Document Intelligence Backend"
-    admin_email: str
-    items_per_user: int = 50
-
     # Database
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
