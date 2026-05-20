@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
+from app.models.document import DocumentStatus
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -29,3 +30,20 @@ class TokenResponse(BaseModel):
 
 class TokenData(BaseModel):
     user_id: Optional[int] = None
+
+class DocumentResponse(BaseModel):
+    id: int
+    filename: str
+    original_filename: str
+    file_size: int
+    mime_type: str
+    status: DocumentStatus
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class DocumentListResponse(BaseModel):
+    documents: list[DocumentResponse]
+    total: int
+

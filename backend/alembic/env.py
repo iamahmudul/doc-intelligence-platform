@@ -28,6 +28,7 @@ if config.config_file_name is not None:
 # =======target_metadata = None
 from app.db.session import Base
 from app.models.user import User
+from app.models.document import Document
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
